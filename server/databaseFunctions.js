@@ -1,4 +1,4 @@
-const {app} = require("./server-main.js");
+const {app, express, , pgp, db} = require("./server_main.js");
 
 //get the structures
 let structures = require("./structures.js");
@@ -14,6 +14,7 @@ function validateUser(username, password){
 
     //връща true или false например (или грешка)
 }
+exports.validateUser = validateUser;
 
 function newUser(username, password){
     //creates new user with set username and password if username is not already in use
@@ -23,6 +24,7 @@ function newUser(username, password){
 
     return user; //or error
 }
+exports.newUser = newUser;
 
 function login(username, password){
     //returns the user whose usename and password were set as parameters if there is one
@@ -32,6 +34,7 @@ function login(username, password){
 
     return user; //or error
 }
+exports.login = login;
 
 function loadUser(username, password, userId){
     //username and the password are the username and the password of the person that requests the change
@@ -43,6 +46,7 @@ function loadUser(username, password, userId){
 
     return user; //or error
 }
+exports.loadUser = loadUser;
 
 function loadUserInfo(username, password, userId){
     //username and the password are the username and the password of the person that requests the change
@@ -54,6 +58,7 @@ function loadUserInfo(username, password, userId){
 
     return userInfo; //or error
 }
+exports.loadUserInfo = loadUserInfo;
 
 function createRoom(username, password, memberIds){
     //username and the password are the username and the password of the person that requests the change
@@ -65,6 +70,7 @@ function createRoom(username, password, memberIds){
 
     return room; //or error
 }
+exports.createRoom = createRoom;
 
 function loadRoom(username, password, roomId){
     //username and the password are the username and the password of the person that requests the change
@@ -76,6 +82,7 @@ function loadRoom(username, password, roomId){
 
     return user; //or error
 }
+exports.loadRoom = loadRoom;
 
 function addMemberToRoom(username, password, userId, roomId){
     //username and the password are the username and the password of the person that requests the change
@@ -86,6 +93,7 @@ function addMemberToRoom(username, password, userId, roomId){
 
     //връща true или false например (или грешка)
 }
+exports.addMemberToRoom = addMemberToRoom;
 
 function removeMemberFromRoom(username, password, userId, roomId){
     //username and the password are the username and the password of the person that requests the change
@@ -96,6 +104,7 @@ function removeMemberFromRoom(username, password, userId, roomId){
 
     //връща true или false например (или грешка)
 }
+exports.removeMemberFromRoom = removeMemberFromRoom;
 
 function changeRoomName(username, password, newName, roomId){
     //username and the password are the username and the password of the person that requests the change
@@ -106,6 +115,7 @@ function changeRoomName(username, password, newName, roomId){
 
     //връща true или false например (или грешка)
 }
+exports.changeRoomName = changeRoomName;
 
 function newMessage(username, password, roomId, message){
     //username and the password are the username and the password of the person that requests the change
@@ -117,6 +127,7 @@ function newMessage(username, password, roomId, message){
 
     //връща true или false например (или грешка)
 }
+exports.newMessage = newMessage;
 
 function removeMessage(username, password, messageId, roomId){
     //username and the password are the username and the password of the person that requests the change
@@ -127,6 +138,7 @@ function removeMessage(username, password, messageId, roomId){
 
     //връща true или false например (или грешка)
 }
+exports.removeMessage = removeMessage;
 
 function editMessage(username, password, messageId, newMessage){
     //username and the password are the username and the password of the person that requests the change
@@ -138,3 +150,4 @@ function editMessage(username, password, messageId, newMessage){
 
     //връща true или false например (или грешка)
 }
+exports.editMessage = editMessage;

@@ -11,6 +11,7 @@ class Room{
         //this.notLoadedMessageIds = [];
     }
 }
+exports.Room = Room;
 
 class Message{
     constructor(){
@@ -21,6 +22,7 @@ class Message{
         this.time;
     }
 }
+exports.Message = Message;
 
 class UserInfo{
     constructor(){
@@ -34,6 +36,7 @@ class UserInfo{
 
     }
 }
+exports.UserInfo = UserInfo;
 
 class User{
     constructor(id_, username_){
@@ -43,3 +46,4 @@ class User{
         this.info;
     }
 }
+exports.User = User;

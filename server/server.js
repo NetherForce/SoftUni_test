@@ -1,12 +1,15 @@
-const {app} = require("./server-main.js");
+const {app, express, pgp, db} = require("./server_main.js");
 const port = 3000
 const path = require("path");
 
-var pgp = require('pg-promise')(/* options */)
-var db = pgp('postgres://ruslan:hkl53dpf*q@77.77.151.91:5432/sample')
-
 //get the structures
 let structures = require("./structures.js");
+
+//get the database comunication functions
+let dbFunctions = require("./databaseFunctions.js");
+
+let user = new structures.User();
+dbFunctions.Log(user);
 
 app.use(express.static('public'));
 app.use(express.json());
