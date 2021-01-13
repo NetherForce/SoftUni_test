@@ -1,12 +1,34 @@
+function updateObj(obj1, obj2){
+    //this function makes the values of obj1 equal to the values of onj2
+    for (const [key, value] of Object.entries(obj2)) {
+        obj1[key] = value;
+    }
+}
+
+
 //classes that describe the rooms and users
 
 class Room{
     constructor(){
         this.id;
-        this.name = null; //името на първият човек, който не си ти
+        this.name = null; //The name of the group. If null, then use the name of the first member, who is not the currently logged one.
+        this.brMembers;
         this.memberIds = [];
-        this.messages = [];
-        this.notLoadedMessageIds = [];
+        this.brMessages;
+        this.messageIds = [];
+        //this.notLoadedMessageIds = [];
+    }
+    addMember(memberId){
+        //not finished
+    }
+    removeMember(memberId){
+        //not finished
+    }
+    changeName(newName){
+        //not finished
+    }
+    removeMessage(messageId){
+        //not finished
     }
 }
 
@@ -17,6 +39,9 @@ class Message{
         this.content;
         this.date;
         this.time;
+    }
+    edit(newMessage){
+        //not finished
     }
 }
 
@@ -36,16 +61,32 @@ class UserInfo{
 class User{
     constructor(){
         this.id;
+        this.username;
+        this.password; //valid only for the currently logged in user
         this.roomIds = [];
         this.info;
     }
+    changeUsername(newUsername){
+        //not finished
+    }
+    changePassword(newPassword){
+        //not finished
+    }
+    changeInfo(infoParameter, newValue){
+        //not finished
+    }
 }
+
+var user; //the current logged user
+var loadedUsers = {}; //object of users that have already been loaded | access a user: loadedUsers[the user id]
+var loadedRooms = {}; //the same as the users, but for the rooms
+var loadedMessages = {}; //the same as the users, but for the messages
 
 
 
 //functions for comunication with the server
 
-function createUser(username, password){
+function register(username, password){
 	$.ajax("/createUser", {
 		data: JSON.stringify({username: username, password: password}),
 		method: "POST",
@@ -53,11 +94,15 @@ function createUser(username, password){
 		success: function(response, textStatus, jqXHR) {			
 			console.log(response);
 			if(response.success) {
-				//OK
+                user = new User();
+                updateObj(user, response.user);
+                user.password = password;
+                console.log(user);
 			}
 			else {
 				alert(response.error);
-				//Error
+                //Error
+                //not finished
 			}
 		},
 		error: function (jqXHR, textStatus, errorThrown) {
@@ -67,3 +112,32 @@ function createUser(username, password){
 		}		
 	});
 }
+
+function login(username, password){
+	$.ajax("/login", {
+		data: JSON.stringify({username: username, password: password}),
+		method: "POST",
+		contentType: "application/json",
+		success: function(response, textStatus, jqXHR) {			
+			console.log(response);
+			if(response.success) {
+                user = new User();
+                updateObj(user, response.user);
+                user.password = password;
+                console.log(user);
+			}
+			else {
+				alert(response.error);
+                //Error
+                //not finished
+			}
+		},
+		error: function (jqXHR, textStatus, errorThrown) {
+			console.log(jqXHR);
+			console.log(textStatus);
+			console.log(errorThrown);
+		}		
+	});
+}
+
+createUser("asdf", "asdf1");
