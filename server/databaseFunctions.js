@@ -1,4 +1,4 @@
-const {app, express, , pgp, db} = require("./server_main.js");
+const {app, express, pgp, db} = require("./server_main.js");
 
 //get the structures
 let structures = require("./structures.js");
@@ -10,6 +10,8 @@ let structures = require("./structures.js");
 function validateUser(username, password){
     //validates that the username and the password match
 
+    let newReturn = new structures.dbReturn();
+    let newUser = new structures.User();
     //========================= Nikola
 
     //връща true или false например (или грешка)

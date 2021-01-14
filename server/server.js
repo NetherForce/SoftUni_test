@@ -1,4 +1,4 @@
-const {app, express, pgp, db} = require("./server_main.js");
+const {app, express, pgp, db, session} = require("./server_main.js");
 const port = 3000
 const path = require("path");
 
@@ -17,6 +17,14 @@ app.use(express.json());
 //makes folder "client" accesable by client
 app.use(express.static(path.join(__dirname, '/../client')));
 
+//add sessions
+app.use(session({
+	secret: 'keyboard cat',
+	resave: false,
+	saveUninitialized: true,
+	cookie: { secure: false } // сложи го на true когато пуснем https-а
+}))
+
 
 //process the requests that the client sends
 
@@ -27,7 +35,8 @@ app.post('/createUser', (req, res) => {
 		return;
 	}
     
-    //not finished
+	let dbReturn = dbFunctions.newUser(req.username, req.password);
+	res.json(dbReturn);
  
 });
 

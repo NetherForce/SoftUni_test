@@ -39,11 +39,20 @@ class UserInfo{
 exports.UserInfo = UserInfo;
 
 class User{
-    constructor(id_, username_){
+    constructor(){
         this.id = id_;
         this.username = username_;
         this.roomIds = [];
-        this.info;
+        this.info = new UserInfo();
     }
 }
 exports.User = User;
+
+class dbReturn{
+    constructor(){
+        this.success; //boolean if the database operation was a success
+        this.error; //this is a string that shows the client what he did wrong
+        this.object; //a class of the wanted information (User, Message/s, Room)
+    }
+}
+exports.dbReturn = dbReturn;
