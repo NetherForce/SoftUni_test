@@ -1,3 +1,5 @@
+var socket = io();
+
 function updateObj(obj1, obj2){
     //this function makes the values of obj1 equal to the values of onj2
     for (const [key, value] of Object.entries(obj2)) {
@@ -82,6 +84,8 @@ var loadedUsers = {}; //object of users that have already been loaded | access a
 var loadedRooms = {}; //the same as the users, but for the rooms
 var loadedMessages = {}; //the same as the users, but for the messages
 
+var sessionId; //id of the seesion we connect to
+
 
 
 //functions for comunication with the server
@@ -95,9 +99,12 @@ function register(username, password){
 			console.log(response);
 			if(response.success) {
                 user = new User();
-                updateObj(user, response.user);
+                updateObj(user, response.object);
                 user.password = password;
-                console.log(user);
+                sessionId = response.sessionId;
+                socket.emit('allthenticate', {sessionId: sessionId});
+                console.log(sessionId);
+
 			}
 			else {
 				alert(response.error);
@@ -122,9 +129,11 @@ function login(username, password){
 			console.log(response);
 			if(response.success) {
                 user = new User();
-                updateObj(user, response.user);
+                updateObj(user, response.object);
                 user.password = password;
-                console.log(user);
+                sessionId = response.sessionId;
+                socket.emit('allthenticate', {sessionId: sessionId});
+                console.log(sessionId);
 			}
 			else {
 				alert(response.error);

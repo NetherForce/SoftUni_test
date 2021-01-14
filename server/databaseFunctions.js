@@ -5,19 +5,6 @@ let structures = require("./structures.js");
 
 //function for comunication between server and data base
 
-//========================= Nikola - Всчка функция ще връща или user, message, room etc. или грешка (ще трябва да обсъдим как да направим грешката). Всички функции ще трябва и да викат validateUser.
-
-function validateUser(username, password){
-    //validates that the username and the password match
-
-    let newReturn = new structures.dbReturn();
-    let newUser = new structures.User();
-    //========================= Nikola
-
-    //връща true или false например (или грешка)
-}
-exports.validateUser = validateUser;
-
 function newUser(username, password){
     //creates new user with set username and password if username is not already in use
     let user = new User();
@@ -38,8 +25,7 @@ function login(username, password){
 }
 exports.login = login;
 
-function loadUser(username, password, userId){
-    //username and the password are the username and the password of the person that requests the change
+function loadUser(userId){
     //userId - id of the user that you want to load (this function doesnt load the info of the user)
 
     let user = new User();
@@ -50,8 +36,7 @@ function loadUser(username, password, userId){
 }
 exports.loadUser = loadUser;
 
-function loadUserInfo(username, password, userId){
-    //username and the password are the username and the password of the person that requests the change
+function loadUserInfo(userId){
     //userId - id of the user whose info we want to load
 
     let userInfo = new UserInfo();
@@ -62,8 +47,8 @@ function loadUserInfo(username, password, userId){
 }
 exports.loadUserInfo = loadUserInfo;
 
-function createRoom(username, password, memberIds){
-    //username and the password are the username and the password of the person that requests the change
+function createRoom(userId, memberIds){
+    //userId - id of the user whose creates the room
     //memberIds - ids of the members
 
     let room = new Room();
@@ -74,8 +59,7 @@ function createRoom(username, password, memberIds){
 }
 exports.createRoom = createRoom;
 
-function loadRoom(username, password, roomId){
-    //username and the password are the username and the password of the person that requests the change
+function loadRoom(roomId){
     //roomId - id of the room that you want to load (This function doesnt load the messages or the members. Only their ids)
 
     let user = new User();
@@ -86,9 +70,9 @@ function loadRoom(username, password, roomId){
 }
 exports.loadRoom = loadRoom;
 
-function addMemberToRoom(username, password, userId, roomId){
-    //username and the password are the username and the password of the person that requests the change
-    //userId - id of the user which we want to add to the room
+function addMemberToRoom(userId, memberId, roomId){
+    //userId - id of the user who requests the change
+    //memberId - id of the user which we want to add to the room
     //roomId - id of the room we want to add the user to
 
     //========================= Nikola
@@ -97,9 +81,9 @@ function addMemberToRoom(username, password, userId, roomId){
 }
 exports.addMemberToRoom = addMemberToRoom;
 
-function removeMemberFromRoom(username, password, userId, roomId){
-    //username and the password are the username and the password of the person that requests the change
-    //userId - id of the user which we want to remove from the room
+function removeMemberFromRoom(userId, memberId, roomId){
+    //userId - id of the user who requests the change
+    //memberId - id of the user which we want to remove from the room
     //roomId - id of the room we want to add the user to
 
     //========================= Nikola
@@ -108,8 +92,8 @@ function removeMemberFromRoom(username, password, userId, roomId){
 }
 exports.removeMemberFromRoom = removeMemberFromRoom;
 
-function changeRoomName(username, password, newName, roomId){
-    //username and the password are the username and the password of the person that requests the change
+function changeRoomName(userId, newName, roomId){
+    //userId - id of the user who requests the change
     //newName - the new name of the room
     //roomId - id of the room we want to add the user to
 
@@ -119,8 +103,8 @@ function changeRoomName(username, password, newName, roomId){
 }
 exports.changeRoomName = changeRoomName;
 
-function newMessage(username, password, roomId, message){
-    //username and the password are the username and the password of the person that requests the change
+function newMessage(userId, roomId, message){
+    //userId - id of the user who wants to send the message
     //messageId - id of the message we want to remove
     //roomId - id of the room we want the message to be added to
     //message - the content of the message we want to add
@@ -131,8 +115,8 @@ function newMessage(username, password, roomId, message){
 }
 exports.newMessage = newMessage;
 
-function removeMessage(username, password, messageId, roomId){
-    //username and the password are the username and the password of the person that requests the change
+function removeMessage(userId, messageId, roomId){
+    //userId - id of the user who wants to delete the message
     //messageId - id of the message we want to remove
     //roomId - id of the room we want to add the user to
 
@@ -142,8 +126,8 @@ function removeMessage(username, password, messageId, roomId){
 }
 exports.removeMessage = removeMessage;
 
-function editMessage(username, password, messageId, newMessage){
-    //username and the password are the username and the password of the person that requests the change
+function editMessage(userId, messageId, newMessage){
+    //userId - id of the user who wants to edit the message
     //messageId - id of the message we want to remove
     //messageId - id of the message we want to edit
     //newMessage - the message we want the old message to become

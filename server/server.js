@@ -26,6 +26,9 @@ app.use(session({
 }))
 
 
+//variables
+let userIdToSockets = {}; //from user id to socket array
+
 //process the requests that the client sends
 
 app.post('/createUser', (req, res) => {
@@ -36,6 +39,10 @@ app.post('/createUser', (req, res) => {
 	}
     
 	let dbReturn = dbFunctions.newUser(req.username, req.password);
+	if(dbReturn.success){
+		req.session.userId = dbReturn.object.id;
+		dbReturn.sessionId = req.session.id;
+	}
 	res.json(dbReturn);
  
 });
@@ -50,6 +57,30 @@ app.post('/login', (req, res) => {
     //not finished
  
 });
+
+//socket comunication
+
+io.on('connection', (socket) => {
+	socket.on('allthenticate', (msg) => {
+		msg = JSON.parse(msg);
+
+		store.get(msg.sessionId, (error, session) => {
+			if(session.userId){
+				if(userIdToSockets[session.userId]){
+					userIdToSockets[session.userId].push(socket);
+				}else{
+					userIdToSockets[session.userId] = [];
+					userIdToSockets[session.userId].push(socket);
+				}
+			}
+		});
+	});
+	socket.on('disconnect', () => {
+		console.log('user disconnected');
+	});
+});
+
+
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
