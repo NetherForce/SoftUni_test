@@ -1,4 +1,4 @@
-const {app, express, pgp, db, session} = require("./server_main.js");
+const {app, express, pgp, db, session, io} = require("./server_main.js");
 const port = 3000
 const path = require("path");
 
@@ -7,9 +7,6 @@ let structures = require("./structures.js");
 
 //get the database comunication functions
 let dbFunctions = require("./databaseFunctions.js");
-
-let user = new structures.User();
-dbFunctions.Log(user);
 
 app.use(express.static('public'));
 app.use(express.json());

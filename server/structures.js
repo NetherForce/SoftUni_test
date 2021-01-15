@@ -20,16 +20,18 @@ class Message{
         this.content;
         this.date;
         this.time;
+        this.roomId;
     }
 }
 exports.Message = Message;
 
 class UserInfo{
     constructor(){
-        this.name;
-        this.middleName;
+        this.firstName;
         this.lastName;
-
+        this.registrDate;
+        this.loginCount;
+        this.lastLogin;
         this.friendIds = [];
         //this.profilePicture = new Image();
         //this.profilePictureSrc;
@@ -40,10 +42,10 @@ exports.UserInfo = UserInfo;
 
 class User{
     constructor(){
-        this.id = id_;
-        this.username = username_;
+        this.id;
+        this.username;
         this.roomIds = [];
-        this.info = new UserInfo();
+        this.info; //userInfo
     }
 }
 exports.User = User;

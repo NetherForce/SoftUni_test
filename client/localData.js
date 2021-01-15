@@ -49,10 +49,11 @@ class Message{
 
 class UserInfo{
     constructor(){
-        this.name;
-        this.middleName;
+        this.firstName;
         this.lastName;
-
+        this.registrDate;
+        this.loginCount;
+        this.lastLogin;
         this.friendIds = [];
         //this.profilePicture = new Image();
         //this.profilePictureSrc;
@@ -64,7 +65,6 @@ class User{
     constructor(){
         this.id;
         this.username;
-        this.password; //valid only for the currently logged in user
         this.roomIds = [];
         this.info;
     }
