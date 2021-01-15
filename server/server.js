@@ -91,8 +91,6 @@ app.listen(port, () => {
         decryptKey(key)
         .then (function (result) {
             key = fromBytesToString(result);
-            console.log(encryptText("Obicham banani"));
-            console.log(decryptText(encryptText("Obicham banani")));
         })
     });
 })
