@@ -1,4 +1,4 @@
-const {app, express, , pgp, db} = require("./server_main.js");
+const {app, express, pgp, db} = require("./server_main.js");
 
 //get the structures
 let structures = require("./structures.js");
