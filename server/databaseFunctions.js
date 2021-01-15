@@ -1,4 +1,4 @@
-const {app, express, pgp, db} = require("./server_main.js");
+const {app, express, pgp, db, aws_crypto, CryptoJS} = require("./server_main.js");
 
 //get the structures
 let structures = require("./structures.js");
@@ -120,7 +120,7 @@ exports.login = login;
 
 async function createRoom(userId, memberIds){
     //userId - id of the user whose creates the room
-    //memberIds - ids of the members
+    //memberIds - list of ids of the members
 
     let room = new structures.Room();
 
@@ -153,6 +153,7 @@ async function addMemberToRoom(userId, memberId, roomId){
 exports.addMemberToRoom = addMemberToRoom;
 
 async function removeMemberFromRoom(userId, memberId, roomId){
+
     //userId - id of the user who requests the change
     //memberId - id of the user which we want to remove from the room
     //roomId - id of the room we want to add the user to
@@ -161,6 +162,7 @@ async function removeMemberFromRoom(userId, memberId, roomId){
     //връща true или false например (или грешка)
 }
 exports.removeMemberFromRoom = removeMemberFromRoom;
+
 
 async function changeRoomName(userId, newName, roomId){
     //userId - id of the user who requests the change
@@ -183,6 +185,15 @@ async function newMessage(userId, roomId, message){
 }
 exports.newMessage = newMessage;
 
+async function loadMessage(messageId){
+    //messageId - the id of the message we want to load
+
+    //========================= Nikola
+
+    //връща message (или грешка)
+}
+exports.loadMessage = loadMessage;
+
 async function removeMessage(userId, messageId, roomId){
     //userId - id of the user who wants to delete the message
     //messageId - id of the message we want to remove
@@ -197,9 +208,26 @@ async function editMessage(userId, messageId, newMessage){
     //userId - id of the user who wants to edit the message
     //messageId - id of the message we want to remove
     //messageId - id of the message we want to edit
+    //roomId - id of the room in which we want to edit the message
     //newMessage - the message we want the old message to become
 
 
     //връща true или false например (или грешка)
 }
 exports.editMessage = editMessage;
+
+function changeUsername(userId, newusername){
+    //change the username of user
+}
+exports.changeUsername = changeUsername;
+
+function changePassword(userId, oldPassword, newPassword){
+    //change the password of user
+}
+exports.changePassword = changePassword;
+
+function changeUserInfo(userId, infoParameter, newInfo){
+    //change info parameter of user
+    //infoParameter - the parameter we want to change (first name, last name, ect.) - a string
+}
+exports.changeUserInfo = changeUserInfo;

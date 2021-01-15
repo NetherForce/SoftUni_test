@@ -7,7 +7,9 @@ let session = require('express-session');
 
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
-//var CryptoJS = require('crypto-js'); //librari for encryption
+
+let aws_crypto = require('@aws-crypto/client-node');
+let CryptoJS = require('crypto-js');
 
 exports.express = express;
 exports.app = app;
@@ -16,4 +18,6 @@ exports.pgp = pgp;
 exports.db = db;
 
 exports.session = session;
-exports.io = io; 
+exports.io = io;
+exports.aws_crypto = aws_crypto;
+exports.CryptoJS = CryptoJS;

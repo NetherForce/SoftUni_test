@@ -15,6 +15,7 @@ exports.Room = Room;
 
 class Message{
     constructor(){
+        this.id;
         this.sentById;
         this.sendByName;
         this.content;
