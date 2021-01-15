@@ -49,7 +49,7 @@ exports.loadUserInfo = loadUserInfo;
 
 function createRoom(userId, memberIds){
     //userId - id of the user whose creates the room
-    //memberIds - ids of the members
+    //memberIds - list of ids of the members
 
     let room = new Room();
 
@@ -70,7 +70,7 @@ function loadRoom(roomId){
 }
 exports.loadRoom = loadRoom;
 
-function addMemberToRoom(userId, memberId, roomId){
+function addMemberToRoom(memberId, roomId){
     //userId - id of the user who requests the change
     //memberId - id of the user which we want to add to the room
     //roomId - id of the room we want to add the user to
@@ -81,7 +81,7 @@ function addMemberToRoom(userId, memberId, roomId){
 }
 exports.addMemberToRoom = addMemberToRoom;
 
-function removeMemberFromRoom(userId, memberId, roomId){
+function removeMemberFromRoom(memberId, roomId){
     //userId - id of the user who requests the change
     //memberId - id of the user which we want to remove from the room
     //roomId - id of the room we want to add the user to
@@ -92,7 +92,7 @@ function removeMemberFromRoom(userId, memberId, roomId){
 }
 exports.removeMemberFromRoom = removeMemberFromRoom;
 
-function changeRoomName(userId, newName, roomId){
+function changeRoomName(newName, roomId){
     //userId - id of the user who requests the change
     //newName - the new name of the room
     //roomId - id of the room we want to add the user to
@@ -115,6 +115,15 @@ function newMessage(userId, roomId, message){
 }
 exports.newMessage = newMessage;
 
+function loadMessage(messageId){
+    //messageId - the id of the message we want to load
+
+    //========================= Nikola
+
+    //връща message (или грешка)
+}
+exports.loadMessage = loadMessage;
+
 function removeMessage(userId, messageId, roomId){
     //userId - id of the user who wants to delete the message
     //messageId - id of the message we want to remove
@@ -126,10 +135,11 @@ function removeMessage(userId, messageId, roomId){
 }
 exports.removeMessage = removeMessage;
 
-function editMessage(userId, messageId, newMessage){
+function editMessage(userId, messageId, roomId, newMessage){
     //userId - id of the user who wants to edit the message
     //messageId - id of the message we want to remove
     //messageId - id of the message we want to edit
+    //roomId - id of the room in which we want to edit the message
     //newMessage - the message we want the old message to become
 
     //========================= Nikola
@@ -137,3 +147,19 @@ function editMessage(userId, messageId, newMessage){
     //връща true или false например (или грешка)
 }
 exports.editMessage = editMessage;
+
+function changeUsername(userId, newusername){
+    //change the username of user
+}
+exports.changeUsername = changeUsername;
+
+function changePassword(userId, oldPassword, newPassword){
+    //change the password of user
+}
+exports.changePassword = changePassword;
+
+function changeUserInfo(userId, infoParameter, newInfo){
+    //change info parameter of user
+    //infoParameter - the parameter we want to change (first name, last name, ect.) - a string
+}
+exports.changeUserInfo = changeUserInfo;

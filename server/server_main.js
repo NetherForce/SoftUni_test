@@ -3,7 +3,7 @@ let app = express();
 
 var pgp = require('pg-promise')(/* options */);
 var db = pgp('postgres://ruslan:hkl53dpf*q@77.77.151.91:5432/sample');
-let session = require('express-session');
+var session = require('express-session');
 
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
@@ -15,4 +15,5 @@ exports.app = app;
 exports.pgp = pgp;
 exports.db = db;
 
-exports.sessino = session;
+exports.session = session;
+exports.io = io;

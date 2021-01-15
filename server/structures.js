@@ -15,11 +15,13 @@ exports.Room = Room;
 
 class Message{
     constructor(){
+        this.id;
         this.sentById;
         this.sendByName;
         this.content;
         this.date;
         this.time;
+        this.roomId;
     }
 }
 exports.Message = Message;
@@ -40,8 +42,8 @@ exports.UserInfo = UserInfo;
 
 class User{
     constructor(){
-        this.id = id_;
-        this.username = username_;
+        this.id;
+        this.username;
         this.roomIds = [];
         this.info = new UserInfo();
     }
