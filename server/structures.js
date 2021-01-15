@@ -15,11 +15,13 @@ exports.Room = Room;
 
 class Message{
     constructor(){
+        this.id;
         this.sentById;
         this.sendByName;
         this.content;
         this.date;
         this.time;
+        this.roomId;
     }
 }
 exports.Message = Message;
@@ -39,11 +41,20 @@ class UserInfo{
 exports.UserInfo = UserInfo;
 
 class User{
-    constructor(id_, username_){
-        this.id = id_;
-        this.username = username_;
+    constructor(){
+        this.id;
+        this.username;
         this.roomIds = [];
-        this.info;
+        this.info = new UserInfo();
     }
 }
 exports.User = User;
+
+class dbReturn{
+    constructor(){
+        this.success; //boolean if the database operation was a success
+        this.error; //this is a string that shows the client what he did wrong
+        this.object; //a class of the wanted information (User, Message/s, Room)
+    }
+}
+exports.dbReturn = dbReturn;

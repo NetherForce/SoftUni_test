@@ -1,66 +1,72 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script src="localData.js"></script>
-
-<style>
-
-body {font-family: Arial;}
-
-form {border: 3px solid #f1f1f1;}
-
-input[type=text], input[type=password] {
-  width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-}
-
-button {
-  background-color: #7c7a7a;
-  color: black;
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: none;
-  cursor: pointer;
-  width: 30%;
-}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script> <!-- uncludes sockets -->
+  <script src="localData.js"></script>
 
 
-span.pass {
-  float: right;
-  padding-top: 16px;
-  display: block;
-  float: none;
-}
+  <style>
+    body {
+      font-family: Arial;
+    }
 
-.cancel {
-  width: auto;
-  border:2px solid black;
-  padding: 10px 18px;
-  background-color: #f44336;
-}
+    form {
+      border: 3px solid #f1f1f1;
+    }
 
-.img2{
-  text-align: center;
-  margin: 24px 0 12px 0;
-}
+    input[type=text],
+    input[type=password] {
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
 
-img.image {
-  width: 20%;
+    button {
+      background-color: #7c7a7a;
+      color: black;
+      padding: 14px 20px;
+      margin: 8px 0;
+      border: none;
+      cursor: pointer;
+      width: 30%;
+    }
 
-  border-radius: 10%;
-}
 
-.username {
-  padding: 16px;
-}
+    span.pass {
+      float: right;
+      padding-top: 16px;
+      display: block;
+      float: none;
+    }
 
-</style>
+    .cancel {
+      width: auto;
+      border: 2px solid black;
+      padding: 10px 18px;
+      background-color: #f44336;
+    }
+
+    .img2 {
+      text-align: center;
+      margin: 24px 0 12px 0;
+    }
+
+    img.image {
+      width: 20%;
+
+      border-radius: 10%;
+    }
+
+    .username {
+      padding: 16px;
+    }
+  </style>
 </head>
 
 <body>
@@ -71,17 +77,17 @@ img.image {
     <img src="img22.png" class="image">
   </div>
 
-  <div class="username" >
-    <label ><b>Username</b></label>
-    <input type="text" placeholder="Enter Username"  required>
+  <div class="username">
+    <label><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" required>
 
     <label> <b>Password</b> </label>
 
-    <input type="password" placeholder="Enter Password"  required>
-        
+    <input type="password" placeholder="Enter Password" required>
+
     <button type="submit">Login</button>
-    
-    </div>
+
+  </div>
 
   <div class="Downtab">
 
@@ -95,4 +101,5 @@ img.image {
 
 
 </body>
+
 </html>
