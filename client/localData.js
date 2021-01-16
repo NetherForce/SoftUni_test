@@ -37,10 +37,11 @@ class Message{
 
 class UserInfo{
     constructor(){
-        this.name;
-        this.middleName;
+        this.firstName;
         this.lastName;
-
+        this.registrDate;
+        this.loginCount;
+        this.lastLogin;
         this.friendIds = [];
         //this.profilePicture = new Image();
         //this.profilePictureSrc;

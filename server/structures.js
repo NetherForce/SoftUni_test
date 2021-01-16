@@ -28,10 +28,11 @@ exports.Message = Message;
 
 class UserInfo{
     constructor(){
-        this.name;
-        this.middleName;
+        this.firstName;
         this.lastName;
-
+        this.registrDate;
+        this.loginCount;
+        this.lastLogin;
         this.friendIds = [];
         //this.profilePicture = new Image();
         //this.profilePictureSrc;
@@ -45,7 +46,7 @@ class User{
         this.id;
         this.username;
         this.roomIds = [];
-        this.info = new UserInfo();
+        this.info; //userInfo
     }
 }
 exports.User = User;

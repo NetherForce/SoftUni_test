@@ -1,4 +1,4 @@
-const {app, express, pgp, db, session, io} = require("./server_main.js");
+const {app, express, pgp, db, session, io, aws_crypto, CryptoJS} = require("./server_main.js");
 const port = 3000
 const path = require("path");
 
@@ -22,10 +22,46 @@ app.use(session({
 	cookie: { secure: false } // сложи го на true когато пуснем https-а
 }))
 
-
 //variables
 let userIdToSockets = {}; //from user id to socket array
 
+const generatorKeyId = 'arn:aws:kms:eu-central-1:234133237098:alias/messages_key';
+const keyIds = ['arn:aws:kms:eu-central-1:234133237098:key/81bbb404-3ce1-4d5c-92e8-81b5970a3219'];
+
+//na survura trqbva da se kachat credentiali ~/.aws/credentials
+const keyring = new aws_crypto.KmsKeyringNode({ generatorKeyId, keyIds });
+
+const { encrypt, decrypt } = aws_crypto.buildClient(
+  aws_crypto.CommitmentPolicy.REQUIRE_ENCRYPT_REQUIRE_DECRYPT
+)
+const context = {
+  purpose: 'database encryption',
+  origin: 'eu-central-1'
+}
+
+let key;
+
+async function decryptKey(encryptedText) {
+    try {
+        const { plaintext, messageHeader } = await decrypt(keyring, encryptedText);
+        return plaintext;
+    } catch (err){
+        console.log(err);
+    }
+};
+function fromBytesToString(bytes) {
+    let string = "";
+    for (let i = 0; i < bytes.length; i++) {
+        string+= String.fromCharCode(bytes[i]);
+    }
+    return string;
+};
+function encryptText(text) {
+    return CryptoJS.AES.encrypt(text, key).toString();
+};
+function decryptText(text) {
+    return CryptoJS.AES.decrypt(text, key).toString(CryptoJS.enc.Utf8);
+};
 //process the requests that the client sends
 
 app.post('/createUser', (req, res) => {
@@ -60,7 +96,6 @@ app.post('/getUserInfo', (req, res) => {
 	let dbReturn = dbFunctions.loadUserInfo(req.userId);
 	res.json(dbReturn);
 });
-
 
 
 //socket comunication
@@ -453,4 +488,14 @@ io.on('connection', (socket) => {
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
+
+    // receive and decrypt key
+    db.any('SELECT * FROM encrypted_key')
+    .then (function (result){
+        key = result[0].key;
+        decryptKey(key)
+        .then (function (result) {
+            key = fromBytesToString(result);
+        })
+    });
 })
