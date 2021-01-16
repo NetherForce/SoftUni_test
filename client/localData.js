@@ -31,6 +31,7 @@ class Message{
         this.content;
         this.date;
         this.time;
+        this.roomId;
     }
 }
 
@@ -60,12 +61,16 @@ var loadedUsers = {}; //object of users that have already been loaded | access a
 var loadedRooms = {}; //the same as the users, but for the rooms
 var loadedMessages = {}; //the same as the users, but for the messages
 
+var currRoomId; //id of the room we are currently in
+
 var sessionId; //id of the seesion we connect to
 
 
 
 //functions for comunication with the server
 function register(username, password){
+    //not finished - need to hash password
+
 	$.ajax("/createUser", {
 		data: JSON.stringify({sessionId: sessionId, username: username, password: password}),
 		method: "POST",
@@ -80,6 +85,8 @@ function register(username, password){
                 socket.emit('allthenticate', {sessionId: sessionId});
                 console.log(sessionId);
         
+                document.getElementById('registerDiv').style.display = "none";
+                document.getElementById('class').style.display = "inline-block";
             } else {
                 alert(response.error);
                 //Error
@@ -94,6 +101,8 @@ function register(username, password){
 }
 
 function login(username, password){
+    //not finished - need to hash password
+
 	$.ajax("/login", {
 		data: JSON.stringify({sessionId: sessionId, username: username, password: password}),
 		method: "POST",
@@ -108,6 +117,9 @@ function login(username, password){
                 sessionId = response.sessionId;
                 socket.emit('allthenticate', {sessionId: sessionId});
                 console.log(sessionId);
+
+                document.getElementById('loginDiv').style.display = "none";
+                document.getElementById('class').style.display = "inline-block";
             } else {
                 alert(response.error);
                 //Error
@@ -124,109 +136,165 @@ function login(username, password){
 
 
 function getUser(userId){
-	$.ajax("/getUser", {
-		data: JSON.stringify({sessionId: sessionId, userId: userId}),
-		method: "POST",
-		contentType: "application/json",
-		success: function(response, textStatus, jqXHR) {			
-			console.log(response);
-			if(response.success) {
-                let newUser = new User();
-                updateObj(newUser, response.object);
-                loadedUsers[userId] = newUser;
-			}
-			else {
-				alert(response.error);
-                //Error
-                //not finished
-			}
-		},
-		error: function (jqXHR, textStatus, errorThrown) {
-			console.log(jqXHR);
-			console.log(textStatus);
-			console.log(errorThrown);
-		}		
-	});
+    if(user != null){
+        $.ajax("/getUser", {
+            data: JSON.stringify({sessionId: sessionId, userId: userId}),
+            method: "POST",
+            contentType: "application/json",
+            success: function(response, textStatus, jqXHR) {			
+                console.log(response);
+                if(response.success) {
+                    let newUser = new User();
+                    updateObj(newUser, response.object);
+                    loadedUsers[userId] = newUser;
+                }
+                else {
+                    alert(response.error);
+                    //Error
+                    //not finished
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR);
+                console.log(textStatus);
+                console.log(errorThrown);
+            }		
+        });
+    }else{
+        alert("You must login/register.");
+    }
 }
 
 function getUserInfo(userId){
-	$.ajax("/getUserInfo", {
-		data: JSON.stringify({sessionId: sessionId, userId: userId}),
-		method: "POST",
-		contentType: "application/json",
-		success: function(response, textStatus, jqXHR) {			
-			console.log(response);
-			if(response.success) {
-                if(!loadedUsers[userId]){
-                    getComputedStyle(userId);
+    if(user != null){
+        $.ajax("/getUserInfo", {
+            data: JSON.stringify({sessionId: sessionId, userId: userId}),
+            method: "POST",
+            contentType: "application/json",
+            success: function(response, textStatus, jqXHR) {			
+                console.log(response);
+                if(response.success) {
+                    if(!loadedUsers[userId]){
+                        getComputedStyle(userId);
+                    }
+                    let newUserInfo = new UserInfo();
+                    updateObj(newUserInfo, response.object);
+                    loadedUsers[userId].info = newUserInfo;
                 }
-                let newUserInfo = new UserInfo();
-                updateObj(newUserInfo, response.object);
-                loadedUsers[userId].info = newUserInfo;
-			}
-			else {
-				alert(response.error);
-                //Error
-                //not finished
-			}
-		},
-		error: function (jqXHR, textStatus, errorThrown) {
-			console.log(jqXHR);
-			console.log(textStatus);
-			console.log(errorThrown);
-		}		
-	});
+                else {
+                    alert(response.error);
+                    //Error
+                    //not finished
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR);
+                console.log(textStatus);
+                console.log(errorThrown);
+            }		
+        });
+    }else{
+        alert("You must login/register.");
+    }
 }
 
 
 
 //functions for comunication with sockets
 function getRoom(roomId){
-    socket.emit('getRoom', {sessionId: sessionId, roomId: roomId});
+    if(user != null){
+        socket.emit('getRoom', {sessionId: sessionId, roomId: roomId});
+    }else{
+        alert("You must login/register.");
+    }
 }
 
 function getMessage(messageId){
-    socket.emit('getMessage', {sessionId: sessionId, messageId: messageId});
+    if(user != null){
+        socket.emit('getMessage', {sessionId: sessionId, messageId: messageId});
+    }else{
+        alert("You must login/register.");
+    }
 }
 
 function createRoom(memberIds){
-    socket.emit('createRoom', {sessionId: sessionId, memberIds: memberIds});
+    if(user != null){
+        socket.emit('createRoom', {sessionId: sessionId, memberIds: memberIds});
+    }else{
+        alert("You must login/register.");
+    }
 }
 
 function addMemberToRoom(memberId, roomId){
-    socket.emit('addMemberToRoom', {sessionId: sessionId, memberId: memberId, roomId: roomId});
+    if(user != null){
+        socket.emit('addMemberToRoom', {sessionId: sessionId, memberId: memberId, roomId: roomId});
+    }else{
+        alert("You must login/register.");
+    }
 }
 
 function removeMemberFromRoom(memberId, roomId){
-    socket.emit('removeMemberFromRoom', {sessionId: sessionId, memberId: memberId, roomId: roomId});
+    if(user != null){
+        socket.emit('removeMemberFromRoom', {sessionId: sessionId, memberId: memberId, roomId: roomId});
+    }else{
+        alert("You must login/register.");
+    }
 }
 
 function changeRoomName(roomId, newName){
-    socket.emit('changeRoomName', {sessionId: sessionId, roomId: roomId, newName: newName});
+    if(user != null){
+        socket.emit('changeRoomName', {sessionId: sessionId, roomId: roomId, newName: newName});
+    }else{
+        alert("You must login/register.");
+    }
 }
 
 function newMessage(messageContent, roomId){
-    socket.emit('newMessage', {sessionId: sessionId, messageContent: messageContent, roomId: roomId});
+    if(user != null){
+        socket.emit('newMessage', {sessionId: sessionId, messageContent: messageContent, roomId: roomId});
+    }else{
+        alert("You must login/register.");
+    }
 }
 
 function removeMessage(messageId){
-    socket.emit('removeMessage', {sessionId: sessionId, messageId: messageId, roomId: roomId});
+    if(user != null){
+        socket.emit('removeMessage', {sessionId: sessionId, messageId: messageId, roomId: roomId});
+    }else{
+        alert("You must login/register.");
+    }
 }
 
 function editMessage(messageId, newMessage){
-    socket.emit('editMessage', {sessionId: sessionId, messageId: messageId, roomId: roomId, newMessage: newMessage});
+    if(user != null){
+        socket.emit('editMessage', {sessionId: sessionId, messageId: messageId, roomId: roomId, newMessage: newMessage});
+    }else{
+        alert("You must login/register.");
+    }
 }
 
 function changeMyUsername(newUsername){
-    socket.emit('changeUsername', {sessionId: sessionId, newUsername: newUsername});
+    if(user != null){
+        socket.emit('changeUsername', {sessionId: sessionId, newUsername: newUsername});
+    }else{
+        alert("You must login/register.");
+    }
 }
 
 function changeMyPassword(oldPassword, newUsername){
-    socket.emit('changePassword', {sessionId: sessionId, oldPassword: oldPassword, newUsername: newUsername});
+    if(user != null){
+        socket.emit('changePassword', {sessionId: sessionId, oldPassword: oldPassword, newUsername: newUsername});
+    }else{
+        alert("You must login/register.");
+    }
 }
 
 function changeMyInfo(infoParameter, newInfo){
-    socket.emit('changeInfo', {sessionId: sessionId, infoParameter: infoParameter, newInfo: newInfo});
+    if(user != null){
+        socket.emit('changeInfo', {sessionId: sessionId, infoParameter: infoParameter, newInfo: newInfo});
+    }else{
+        alert("You must login/register.");
+    }
 }
 
 
@@ -244,7 +312,9 @@ socket.on('receivedRoom', (msg) => {
 
     let newRoom = new Room();
     updateObj(newRoom, response.object);
-    loadedRooms[roomId] = newRoom;
+    loadedRooms[newRoom.id] = newRoom;
+
+    roomDisplayCreator(newRoom.id);
 });
 
 socket.on('receivedMessage', (msg) => {
@@ -259,6 +329,7 @@ socket.on('receivedMessage', (msg) => {
         loadedRooms[newMessage.roomId].messageIds[loadedRooms[newMessage.roomId].brMessages] = newMessage.id;
         loadedRooms[newMessage.roomId].brMessages++;
     }
+    displayMessage(newMessage.id);
 });
 
 socket.on('addedMemberToRoom', (msg) => {
@@ -291,7 +362,7 @@ socket.on('removedMemberFromRoom', (msg) => {
 });
 
 socket.on('changedRoomName', (msg) => {
-    let response = JSON.parse(msg);\
+    let response = JSON.parse(msg);
     let roomId = response.roomId;
     let newName = response.newName;
 
@@ -354,6 +425,94 @@ socket.on('changedInfo', (msg) => {
     }else{
         getUserInfo(user.id);
     }
-});
+});  
 
-register("asdf", "asdf");
+
+
+//function for the buttons
+
+function loginButton(){
+    let username = document.getElementById('loginDiv').querySelectorAll('input')[0].value;
+    let password = document.getElementById('loginDiv').querySelectorAll('input')[1].value;
+
+    //login(username, password);
+}
+
+function registerButton(){
+    let username = document.getElementById('registerDiv').querySelectorAll('input')[0].value;
+    let password = document.getElementById('registerDiv').querySelectorAll('input')[1].value;
+
+    //register(username, password);
+}
+
+function switchLoginRegister(){
+    if(document.getElementById('loginDiv').style.display == "none"){
+        document.getElementById('loginDiv').style.display = "inline-block";
+        document.getElementById('registerDiv').style.display = "none";
+    }else{
+        document.getElementById('loginDiv').style.display = "none";
+        document.getElementById('registerDiv').style.display = "inline-block";
+    }
+
+    document.getElementById('registerDiv').querySelectorAll('input')[0].value = "";
+    document.getElementById('registerDiv').querySelectorAll('input')[1].value = "";
+    document.getElementById('loginDiv').querySelectorAll('input')[0].value = "";
+    document.getElementById('loginDiv').querySelectorAll('input')[1].value = "";
+}
+
+function displayMessage(messageId){
+    if(loadedMessages[messageId] == null){
+        getMessage(messageId);
+    }
+
+    let theMessage = loadedMessages[messageId];
+    let theMessageDiv = document.getElementById('mainDiv').querySelector('message_copy').cloneNode(true);
+    theMessageDiv.setAttribute("id", messageId);
+    if(theMessage.sentById == user.id){
+        theMessageDiv.setAttribute("class", "myMessage");
+        theMessageDiv.innerText = theMessage.content;
+    }else{
+        theMessageDiv.setAttribute("class", "notMyMessage");
+        theMessageDiv.innerText = theMessage.sendByName + ": " + theMessage.content;
+    }
+
+    if(theMessage.roomId != currRoomId){
+        if(document.getElementById('mainDiv').querySelector(theMessage.roomId)){
+            document.getElementById('mainDiv').querySelector(theMessage.roomId).appendChild(theMessageDiv);
+        }
+        if(document.getElementById('mainDiv').querySelector(theMessage.roomId+"_")){
+            document.getElementById('mainDiv').querySelector(theMessage.roomId+"_").style.fontWeight = "700";
+        }
+    }
+}
+
+function roomDisplayF(roomId){
+    currRoomId = roomId;
+
+    if(document.getElementById('mainDiv').querySelector(roomId+"_")){
+        document.getElementById('mainDiv').querySelector(roomId+"_").style.fontWeight = "200";
+    }
+
+    if(loadedRooms[roomId] == null){
+        getRoom(roomId);
+
+        let theRoomDiv = document.getElementById('mainDiv').querySelector('room_chat_copy').cloneNode(true);
+        theRoomDiv.setAttribute("id", roomId);
+        document.getElementById('mainDiv').querySelector('room_chat_storage').appendChild(theRoomDiv);
+
+        for(let i = 0; i < currRoom.brMessages; i++){
+            if(loadedMessages[currRoom.messageIds[i]] == null){
+                getMessage(currRoom.messageIds[i]);
+            }
+
+            displayMessage(currRoom.messageIds[i]);
+        }
+    }
+}
+
+function roomDisplayCreator(roomId){
+    let theRoomDisplayerDiv = document.getElementById('mainDiv').querySelector('room_display_copy').cloneNode(true);
+    theRoomDisplayerDiv.innerText = roomId;
+    theRoomDisplayerDiv.style.fontWeight = "700";
+    document.getElementById('mainDiv').querySelector('roomDisplayHolder').appendChild(theRoomDisplayerDiv);
+}

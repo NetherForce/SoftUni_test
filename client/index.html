@@ -1,15 +1,91 @@
 <!DOCTYPE html>
 <html>
-<head>
-</head>
 
-<body>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="../node_modules/socket.io/client-dist/socket.io.js"></script>  <!-- uncludes sockets -->
+        <script src="localData.js"></script>
 
+        <link rel="stylesheet" href="main.css"/>
+    </head>
 
-    <a href="/login.html">to login</a>
+    <body>
 
+        <!-- div for the login menu -->
+        <div id="loginDiv" style="display: none;">
+            <div class="img2">
 
+                <img src="img22.png" class="image">
+            </div>
 
+            <div class="username">
+                <label><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" required>
 
-</body>
+                <label> <b>Password</b> </label>
+
+                <input type="password" placeholder="Enter Password" required>
+
+                <button type="submit" onclick="loginButton()">Login</button>
+
+            </div>
+
+            <div class="Downtab">
+
+                <button type="button" class="switchButton" onclick="switchLoginRegister()">Register</button>
+
+            </div>
+        </div>
+
+        <!-- div for the register menu -->
+        <div id="registerDiv" style="display: none;">
+            <div class="img2">
+
+                <img src="img22.png" class="image">
+            </div>
+
+            <div class="username">
+                <label><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" required>
+
+                <label> <b>Password</b> </label>
+
+                <input type="password" placeholder="Enter Password" required>
+
+                <button type="submit" onclick="registerButton()">Register</button>
+
+            </div>
+
+            <div class="Downtab">
+
+                <button type="button" class="switchButton" onclick="switchLoginRegister()">Login</button>
+
+            </div>
+        </div>
+
+        <!-- div for the main menu -->
+        <div id="mainDiv" style="display: inline-block;">
+            <div id = "roomDisplayHolder">
+
+            </div>
+
+            <div id = "input_display_box">
+                <div id="room_chat_storage">
+                    
+                </div>
+
+                <div id = "message_send_container">
+                    <input id="usermsg" type="text" id="usermsg" />
+                    <button name="submitmsg" onclick="">Send</button>
+                </div>
+            </div>
+
+            <!-- div for copying -->
+            <div id = "room_chat_copy" class="chatbox"></div>
+            <div id = "message_copy"></div>
+            <button id = "room_display_copy" class="room_display" onclick="roomDisplayF(this.getAttribute('id'))"><button>
+        </div>
+
+    </body>
+
 </html>
