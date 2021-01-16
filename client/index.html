@@ -64,30 +64,21 @@
         </div>
 
         <!-- div for the main menu -->
-        <div id="mainDiv" style="display: none;">
-            <button id="main_playerSearch" onclick="changeBetwenMainAndPlayerSearchDiv()">Find some friends</button>
+        <div id="mainDiv" style="display:inline-block;">
+            <button id="main_playerSearch" class="button2" onclick="changeBetwenMainAndPlayerSearchDiv()">Find some friends</button>
 
-            <div id = "roomDisplayHolder">
+            <div id = "roomDisplayHolder" style="display: inline-block;">
                 
             </div>
 
-            <div id = "input_display_box">
+            <div id = "input_display_box" style="display:inline-block">
                 <div id="room_chat_storage">
-                    <div style="width: 60%;">AAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>
-                    <div style="width: 60%;">AAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>
-                    <div style="width: 60%;">AAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>
-                    <div style="width: 60%;">AAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>
-                    <div style="width: 60%;">AAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>
-                    <div style="width: 60%;">AAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>
-                    <div style="width: 60%;">AAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>
-                    <div style="width: 60%;">AAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>
-                    <div style="width: 60%;">AAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>
-                    <div style="width: 60%;">AAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>
+                    
                 </div>
 
                 <div id = "message_send_container">
                     <input id="usermsg" type="text" id="usermsg" />
-                    <button name="submitmsg" onclick="">Send</button>
+                    <button name="submitmsg" class="button" onclick="">Send</button>
                 </div>
             </div>
 
@@ -98,7 +89,7 @@
         </div>
 
         <!-- div for the player search -->
-        <div id="playerSearchDiv" style="display: inline-block;">
+        <div id="playerSearchDiv" style="display:none;">
             <button id="playerSearch_main" onclick="changeBetwenMainAndPlayerSearchDiv()">Chat with friends</button>
             <button id="playerSearchRefresh_main" onclick="refreshPlayerSearch()">Refresh</button>
             <button id="changeVisabilityButton" onclick="">Your status: Invisible</button>

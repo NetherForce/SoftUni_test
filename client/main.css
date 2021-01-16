@@ -184,8 +184,7 @@ input[type=password] {
     border-radius: 4px;
     border-bottom: 4px solid #a7a7a7;
 
-    width: 60%;
-    max-height: 50%;
+
 
     float: right;
 
@@ -210,7 +209,7 @@ input[type=password] {
     text-align: right;
 }
 
-#mainDiv #roomDisplayHolder{
+#mainDiv #input_display_box #room_chat_storage{
     margin: 0 auto;
     margin-bottom: 4%;
     border: 1px solid #a7a7a7;
@@ -226,6 +225,7 @@ input[type=password] {
 
     overflow-y: auto;
 }
+
 /*
 .#mainDiv #roomDisplayHolder::-webkit-scrollbar {
     display: none;
@@ -236,18 +236,63 @@ input[type=password] {
   scrollbar-width: none;
 }*/
 
+
+#mainDiv #input_display_box #room_chat_storage{
+    position: relative;
+    top: 35px;
+    right:550PX;
+    height: 400px;
+    width: 730px;
+}
+
+
+#mainDiv #roomDisplayHolder{
+    position: relative;
+    bottom: 10px;
+    right:155PX;
+}
+
+#mainDiv .button2{
+    position: relative;
+    bottom: 480px;
+    left: 450px;
+}
+
+#mainDiv #roomDisplayHolder{
+
+    border: 1px solid #000000;
+    background-color: white;
+
+    width: 12%;
+    height: 440px;
+    box-sizing: border-box;
+
+}
+
+#mainDiv #input_display_box{
+        position: relative;
+        left: 400px;
+        top: 10px;
+}
+
 #mainDiv #usermsg {
-    width: 90%;
+    width: 150%;
+    height: 30px;
     border-radius: 4px;
     border: 1px solid #000000;
-
+    position: relative;
+    right: 550px;
     box-sizing: border-box;
 }
-#mainDiv #submitmsg {
-    width: 5%;
-    border-radius: 4px;
+#mainDiv #message_send_container .button {
+    width: 15%;
+    height: 31px;
+    border-radius: 5px;
+    
     border: 1px solid #000000;
-
+    position: relative;
+    bottom:30px;
+    right: 72px;
     box-sizing: border-box;
 }
 
