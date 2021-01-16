@@ -64,6 +64,12 @@ var loadedMessages = {}; //the same as the users, but for the messages
 
 var currRoomId; //id of the room we are currently in
 
+var searchingPlayersIds = []; //players that are searching for a random chat
+
+var lastAddedRoomId; //the id of the room we recieved last
+var playerToAddToRoom = null; //the id of a player we must add to the lastly recieved room
+var amIVisible = false; //shows if other players can see me in the search players menu
+
 var sessionId; //id of the seesion we connect to
 
 
@@ -298,6 +304,26 @@ function changeMyInfo(infoParameter, newInfo){
     }
 }
 
+function changeVisability(newVisability){
+    if(user != null){
+        if(newVisability = false){
+            socket.emit('becomeInvisible', {sessionId: sessionId});
+        }else{
+            socket.emit('becomeVisible', {sessionId: sessionId});
+        }
+    }else{
+        alert("You must login/register.");
+    }
+}
+
+function requestVisivblePlayers(){
+    if(user != null){
+        socket.emit('getVisiblePlayers', {sessionId: sessionId});
+    }else{
+        alert("You must login/register.");
+    }
+}
+
 
 
 //listen with sockets for server
@@ -314,6 +340,13 @@ socket.on('receivedRoom', (msg) => {
     let newRoom = new Room();
     updateObj(newRoom, response.object);
     loadedRooms[newRoom.id] = newRoom;
+
+    lastAddedRoomId = newRoom.id;
+
+    if(playerToAddToRoom != null){
+        addMemberToRoom(playerToAddToRoom, lastAddedRoomId);
+        playerToAddToRoom = null;
+    }
 
     roomDisplayCreator(newRoom.id);
 });
@@ -428,6 +461,26 @@ socket.on('changedInfo', (msg) => {
     }
 });  
 
+socket.on('youBecameVisible', (msg) => {
+    let response = JSON.parse(msg);
+
+    document.getElementById('playerSearchDiv').querySelector('changeVisabilityButton').innerText = "Your status: Visible";
+    amIVisible = true;
+});
+
+socket.on('becomeInvisible', (msg) => {
+    let response = JSON.parse(msg);
+
+    document.getElementById('playerSearchDiv').querySelector('changeVisabilityButton').innerText = "Your status: Invisible";
+    amIVisible = false;
+});
+
+socket.on('receivedVisablePlayers', (msg) => {
+    let response = JSON.parse(msg);
+
+    searchingPlayersIds = response.visible;
+});
+
 
 
 //function for the buttons
@@ -436,17 +489,22 @@ function loginButton(){
     let username = document.getElementById('loginDiv').querySelectorAll('input')[0].value;
     let password = document.getElementById('loginDiv').querySelectorAll('input')[1].value;
 
-    //login(username, password);
+    login(username, password);
 }
 
 function registerButton(){
     let username = document.getElementById('registerDiv').querySelectorAll('input')[0].value;
     let password = document.getElementById('registerDiv').querySelectorAll('input')[1].value;
 
-    //register(username, password);
+    register(username, password);
 }
 
 function switchLoginRegister(){
+    if(user == null){
+        alert('You must login/register.');
+        return 0;
+    }
+
     if(document.getElementById('loginDiv').style.display == "none"){
         document.getElementById('loginDiv').style.display = "inline-block";
         document.getElementById('registerDiv').style.display = "none";
@@ -462,6 +520,11 @@ function switchLoginRegister(){
 }
 
 function displayMessage(messageId){
+    if(user == null){
+        alert('You must login/register.');
+        return 0;
+    }
+
     if(loadedMessages[messageId] == null){
         getMessage(messageId);
     }
@@ -476,6 +539,7 @@ function displayMessage(messageId){
         theMessageDiv.setAttribute("class", "notMyMessage");
         theMessageDiv.innerText = theMessage.sendByName + ": " + theMessage.content;
     }
+    theMessageDiv.style.display = "inline-block";
 
     if(theMessage.roomId != currRoomId){
         if(document.getElementById('mainDiv').querySelector(theMessage.roomId)){
@@ -488,6 +552,16 @@ function displayMessage(messageId){
 }
 
 function roomDisplayF(roomId){
+    if(user == null){
+        alert('You must login/register.');
+        return 0;
+    }
+
+    roomId = roomId.slice(0, -1);
+
+    if(document.getElementById('mainDiv').querySelector('room_chat_storage').querySelector(currRoomId)){
+        document.getElementById('mainDiv').querySelector('room_chat_storage').querySelector(currRoomId).style.display = "none";
+    }
     currRoomId = roomId;
 
     if(document.getElementById('mainDiv').querySelector(roomId+"_")){
@@ -499,6 +573,7 @@ function roomDisplayF(roomId){
 
         let theRoomDiv = document.getElementById('mainDiv').querySelector('room_chat_copy').cloneNode(true);
         theRoomDiv.setAttribute("id", roomId);
+        theRoomDiv.style.display = "inline-block";
         document.getElementById('mainDiv').querySelector('room_chat_storage').appendChild(theRoomDiv);
 
         for(let i = 0; i < currRoom.brMessages; i++){
@@ -508,12 +583,93 @@ function roomDisplayF(roomId){
 
             displayMessage(currRoom.messageIds[i]);
         }
+    }else{
+        document.getElementById('mainDiv').querySelector('room_chat_storage').querySelector(currRoomId).style.display = "inline-block";
     }
 }
 
 function roomDisplayCreator(roomId){
+    if(user == null){
+        alert('You must login/register.');
+        return 0;
+    }
+
     let theRoomDisplayerDiv = document.getElementById('mainDiv').querySelector('room_display_copy').cloneNode(true);
     theRoomDisplayerDiv.innerText = roomId;
     theRoomDisplayerDiv.style.fontWeight = "700";
-    document.getElementById('mainDiv').querySelector('roomDisplayHolder').appendChild(theRoomDisplayerDiv);
+    theRoomDisplayerDiv.style.display = "inline-block";
+    document.getElementById('mainDiv').querySelector('roomDisplayHolder').appendChild(theRoomDisplayerDiv);   
+}
+
+function changeBetwenMainAndPlayerSearchDiv(){
+    if(user == null){
+        alert('You must login/register.');
+        return 0;
+    }
+
+    if(document.getElementById('mainDiv').style.display == "none"){
+        document.getElementById('mainDiv').style.display = "inline-block";
+        document.getElementById('playerSearchDiv').style.display = "none";
+    }else{
+        document.getElementById('mainDiv').style.display = "none";
+        document.getElementById('playerSearchDiv').style.display = "inline-block";
+    }
+}
+
+function cloneSearchingPlayer(userId){
+    if(user == null){
+        alert('You must login/register.');
+        return 0;
+    }
+
+    if(user.id = userId){
+        return 0;
+    }
+
+    if(loadedUsers[userId] == null){
+        getUser(userId);
+    }
+
+    let playerSearchCopy = document.getElementById('playerSearchDiv').querySelector(searching_player_copy).cloneNode(true);
+    playerSearchCopy.id = '';
+    playerSearchCopy.querySelector('playerSearchText').innerText = loadedUsers[userId].username;
+    playerSearchCopy.querySelector('playerSearchButton').id = loadedUsers[userId].id;
+    document.getElementById('playerSearchDiv').querySelector('playerSearchContainer').appendChild(playerSearchCopy);
+}
+
+function refreshPlayerSearch(){
+    if(user == null){
+        alert('You must login/register.');
+        return 0;
+    }
+
+    document.getElementById('playerSearchDiv').innerHTML = "";
+
+    //call function that gets searchin for a player
+
+    for(let i = 0; i < searchingPlayersIds.length(); i++){
+        if(searchingPlayersIds[i] != user.id){
+            cloneSearchingPlayer(searchingPlayersIds[i]);
+        }
+    }
+}
+
+function startChatButton(userId){
+    if(user == null){
+        alert('You must login/register.');
+        return 0;
+    }
+
+    createRoom();
+
+    playerToAddToRoom = userId;
+}
+
+function changeVisabilityStatus(){
+    if(user == null){
+        alert('You must login/register.');
+        return 0;
+    }
+
+    changeVisability(!amIVisible);
 }

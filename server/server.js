@@ -25,6 +25,8 @@ app.use(session({
 //variables
 let userIdToSockets = {}; //from user id to socket array
 
+var visibleUsers = []; //array of users that are visible in the search player menu
+
 const generatorKeyId = 'arn:aws:kms:eu-central-1:234133237098:alias/messages_key';
 const keyIds = ['arn:aws:kms:eu-central-1:234133237098:key/81bbb404-3ce1-4d5c-92e8-81b5970a3219'];
 
@@ -477,6 +479,58 @@ io.on('connection', (socket) => {
 		});
 	});
 
+	socket.on('becomeVisible', (msg) => {
+		msg = JSON.parse(msg);
+
+		store.get(msg.sessionId, (error, session) => {
+			if(session.userId){
+				if(userIdToSockets[session.userId]){
+					let isUserAlreadyVisible = false;
+
+					for(let i = 0; i < visibleUsers.length(); i++){
+						if(visibleUsers[i] == session.userId){
+							isUserAlreadyVisible = true;
+						}
+					}
+
+					if(isUserAlreadyVisible = false){
+						visibleUsers.push(session.userId);
+					}
+					userIdToSockets[session.userId].emit('youBecameVisible');
+				}
+			}
+		});
+	});
+
+	socket.on('becomeInvisible', (msg) => {
+		msg = JSON.parse(msg);
+
+		store.get(msg.sessionId, (error, session) => {
+			if(session.userId){
+				if(userIdToSockets[session.userId]){
+					for(let i = 0; i < visibleUsers.length(); i++){
+						if(visibleUsers[i] == session.userId){
+							visibleUsers[i] = visibleUsers[visibleUsers.length()-1];
+							visibleUsers.pop();
+							userIdToSockets[session.userId].emit('youBecameInvisible', {});
+						}
+					}
+				}
+			}
+		});
+	});
+
+	socket.on('getVisiblePlayers', (msg) => {
+		msg = JSON.parse(msg);
+
+		store.get(msg.sessionId, (error, session) => {
+			if(session.userId){
+				if(userIdToSockets[session.userId]){
+					userIdToSockets[session.userId].emit('receivedVisablePlayers', {visible: visibleUsers});
+				}
+			}
+		});
+	});
 
 
 	socket.on('disconnect', () => {

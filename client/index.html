@@ -64,14 +64,25 @@
         </div>
 
         <!-- div for the main menu -->
-        <div id="mainDiv" style="display: inline-block;">
-            <div id = "roomDisplayHolder">
+        <div id="mainDiv" style="display: none;">
+            <button id="main_playerSearch" onclick="changeBetwenMainAndPlayerSearchDiv()">Find some friends</button>
 
+            <div id = "roomDisplayHolder">
+                
             </div>
 
             <div id = "input_display_box">
                 <div id="room_chat_storage">
-                    
+                    <div style="width: 60%;">AAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>
+                    <div style="width: 60%;">AAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>
+                    <div style="width: 60%;">AAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>
+                    <div style="width: 60%;">AAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>
+                    <div style="width: 60%;">AAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>
+                    <div style="width: 60%;">AAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>
+                    <div style="width: 60%;">AAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>
+                    <div style="width: 60%;">AAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>
+                    <div style="width: 60%;">AAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>
+                    <div style="width: 60%;">AAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>
                 </div>
 
                 <div id = "message_send_container">
@@ -81,9 +92,25 @@
             </div>
 
             <!-- div for copying -->
-            <div id = "room_chat_copy" class="chatbox"></div>
-            <div id = "message_copy"></div>
-            <button id = "room_display_copy" class="room_display" onclick="roomDisplayF(this.getAttribute('id'))"><button>
+            <div id = "room_chat_copy" class="chatbox" style="display: none;"></div>
+            <div id = "message_copy" style="display: none;"></div>
+            <button id = "room_display_copy" class="room_display" style="display: none;" onclick="roomDisplayF(this.getAttribute('id'))"></button>
+        </div>
+
+        <!-- div for the player search -->
+        <div id="playerSearchDiv" style="display: inline-block;">
+            <button id="playerSearch_main" onclick="changeBetwenMainAndPlayerSearchDiv()">Chat with friends</button>
+            <button id="playerSearchRefresh_main" onclick="refreshPlayerSearch()">Refresh</button>
+            <button id="changeVisabilityButton" onclick="">Your status: Invisible</button>
+
+            <div id = "playerSearchContainer">
+
+            </div>
+
+            <div id = "searching_player_copy" style="display: none;">
+                <p class="playerSearchText"></p>
+                <button class="playerSearchButton" onclick="startChatButton(this.getAttribute('id'))">Start chat</button>
+            </div>
         </div>
 
     </body>
